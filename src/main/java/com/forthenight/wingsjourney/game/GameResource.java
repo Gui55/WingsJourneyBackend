@@ -63,5 +63,10 @@ public class GameResource {
 
 		return ResponseEntity.ok("Game image uploaded successfully."+imagePath);
 	}
+
+	@GetMapping("games/id/{id}")
+	public Game getGameById(@PathVariable Integer id){
+		return gameRepository.findById(id).get();
+	}
 	
 }
