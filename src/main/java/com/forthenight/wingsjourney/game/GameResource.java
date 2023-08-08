@@ -48,6 +48,12 @@ public class GameResource {
 		return ResponseEntity.ok(gameRepository.findByName(game.getName()).getId());
 	}
 
+	@PostMapping("games/update")
+	public ResponseEntity<String> updateGame(@RequestBody Game game){
+		gameRepository.save(game);
+		return ResponseEntity.ok("Game salvo com sucesso");
+	}
+
 	@PostMapping(value = "games/image/{id}")
 	public ResponseEntity<String> uploadGameImage(@PathVariable Integer id, @RequestBody MultipartFile image) 
 	throws IllegalStateException, IOException{
@@ -56,7 +62,9 @@ public class GameResource {
         Path dir = Paths.get("images");
         String fileName = image.getOriginalFilename();
         Path imagePath = dir.resolve(fileName);
-        Files.copy(image.getInputStream(), imagePath);
+		if(!Files.exists(imagePath)){
+			Files.copy(image.getInputStream(), imagePath);
+		}
 
         game.setImage("http://localhost:8081/images/"+fileName);
         gameRepository.save(game);
