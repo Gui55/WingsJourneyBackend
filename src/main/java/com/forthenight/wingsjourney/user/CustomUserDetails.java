@@ -9,11 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class CustomUserDetails implements UserDetails{
 
     private User user;
-    private BCryptPasswordEncoder passwordEncoder;
 
-    public CustomUserDetails(User user, BCryptPasswordEncoder passwordEncoder){
+    public CustomUserDetails(User user){
         this.user = user;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -25,7 +23,7 @@ public class CustomUserDetails implements UserDetails{
     @Override
     public String getPassword() {
         // TODO Auto-generated method stub
-        return passwordEncoder.encode(user.getPassword());
+        return user.getPassword();
     }
 
     @Override

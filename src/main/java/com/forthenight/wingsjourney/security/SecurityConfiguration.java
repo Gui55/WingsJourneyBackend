@@ -45,7 +45,6 @@ public class SecurityConfiguration {
 			.requestMatchers(WHITE_LIST).permitAll()
 			.anyRequest().authenticated()
 		).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		 .httpBasic(Customizer.withDefaults())
 		 .csrf(csrf -> csrf.disable())
 		 .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()))
 		 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))

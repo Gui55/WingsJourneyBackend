@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,15 +17,18 @@ public class UserResource {
     private final UserRepository repository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserResource(
         UserRepository repository, 
         AuthenticationManager authenticationManager,
-        JwtTokenService jwtTokenService
+        JwtTokenService jwtTokenService,
+        BCryptPasswordEncoder passwordEncoder
     ){
         this.repository = repository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("authenticate")
@@ -49,7 +53,7 @@ public class UserResource {
             0,
             userData.getUsername(),
             userData.getEmail(),
-            userData.getPassword()
+            passwordEncoder.encode(userData.getPassword())
         );
         repository.save(user);
         return ResponseEntity.ok(userData);
