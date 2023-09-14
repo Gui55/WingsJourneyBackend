@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,6 +44,7 @@ public class SecurityConfiguration {
 			(requests) -> 
 			requests
 			.requestMatchers(WHITE_LIST).permitAll()
+			.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated()
 		).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		 .csrf(csrf -> csrf.disable())
