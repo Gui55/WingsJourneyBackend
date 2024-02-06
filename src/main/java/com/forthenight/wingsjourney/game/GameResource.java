@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forthenight.wingsjourney.game.repository.GameRepository;
 
+import jakarta.annotation.security.RolesAllowed;
+
 @RestController
 public class GameResource {
 	
@@ -80,6 +82,12 @@ public class GameResource {
 	@GetMapping("games/id/{id}")
 	public Game getGameById(@PathVariable Integer id){
 		return gameRepository.findById(id).get();
+	}
+
+	@GetMapping("games/test")
+	@RolesAllowed({"ROLE_KING"})
+	public String testLink(){
+		return "A test link";
 	}
 	
 }

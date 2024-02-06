@@ -1,8 +1,11 @@
 package com.forthenight.wingsjourney.user;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails{
@@ -15,19 +18,20 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        return null;
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for(Role role : user.getRoles()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getName()));
+        }
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        // TODO Auto-generated method stub
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        // TODO Auto-generated method stub
         return user.getUsername();
     }
 

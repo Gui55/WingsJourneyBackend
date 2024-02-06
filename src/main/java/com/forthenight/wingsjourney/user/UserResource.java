@@ -1,5 +1,8 @@
 package com.forthenight.wingsjourney.user;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,17 +18,20 @@ import com.forthenight.wingsjourney.security.jwt.JwtTokenService;
 public class UserResource {
 
     private final UserRepository repository;
+    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserResource(
         UserRepository repository, 
+        RoleRepository roleRepository,
         AuthenticationManager authenticationManager,
         JwtTokenService jwtTokenService,
         BCryptPasswordEncoder passwordEncoder
     ){
         this.repository = repository;
+        this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
         this.passwordEncoder = passwordEncoder;
@@ -53,10 +59,17 @@ public class UserResource {
             0,
             userData.getUsername(),
             userData.getEmail(),
-            passwordEncoder.encode(userData.getPassword())
+            passwordEncoder.encode(userData.getPassword()),
+            getDefaultRole()
         );
         repository.save(user);
         return ResponseEntity.ok(userData);
+    }
+
+    private Set<Role> getDefaultRole(){
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("KING"));
+        return roles;
     }
 
 }
