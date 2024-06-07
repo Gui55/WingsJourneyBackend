@@ -22,18 +22,18 @@ public class JwtTokenService {
 
     public String generateToken(Authentication authentication) {
 
-        var scope = authentication
+        var authorities = authentication
                         .getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.joining(" "));
+                        .collect(Collectors.toList());
 
         var claims = JwtClaimsSet.builder()
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plus(90, ChronoUnit.MINUTES))
                         .subject(authentication.getName())
-                        .claim("scope", scope)
+                        .claim("authorities", authorities)
                         .build();
 
         return this.jwtEncoder
