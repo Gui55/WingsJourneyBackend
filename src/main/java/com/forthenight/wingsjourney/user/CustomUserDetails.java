@@ -1,7 +1,10 @@
 package com.forthenight.wingsjourney.user;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,8 +18,9 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        return null;
+        Set<SimpleGrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(user.getRole()));
+        return roles;
     }
 
     @Override
